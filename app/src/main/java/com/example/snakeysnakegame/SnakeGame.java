@@ -15,10 +15,12 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 
-class SnakeGame extends SurfaceView implements Runnable{
+class SnakeGame extends SurfaceView implements Runnable {
 
     // Objects for the game loop/thread
     private Thread mThread = null;
@@ -69,7 +71,7 @@ class SnakeGame extends SurfaceView implements Runnable{
         int right = left + buttonWidth;
         int bottom = top + buttonHeight;
 
-        mPauseButtonRect = new Rect(left, top, right,bottom);
+        mPauseButtonRect = new Rect(left, top, right, bottom);
 
         // Initialize the SoundPool
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -134,15 +136,15 @@ class SnakeGame extends SurfaceView implements Runnable{
         mNextFrameTime = System.currentTimeMillis();
     }
 
-public void pauseGame() {
-    mPaused = true;
-}
+    public void pauseGame() {
+        mPaused = true;
+    }
 
     // Handles the game loop
     @Override
     public void run() {
         while (mPlaying) {
-            if(!mPaused) {
+            if (!mPaused) {
                 // Update 10 times a second
                 if (updateRequired()) {
                     update();
@@ -150,6 +152,12 @@ public void pauseGame() {
             }
 
             draw();
+            // Add a delay to control the frame rate
+            try {
+                Thread.sleep(100); // Adjust the delay as needed
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -163,11 +171,11 @@ public void pauseGame() {
         final long MILLIS_PER_SECOND = 1000;
 
         // Are we due to update the frame
-        if(mNextFrameTime <= System.currentTimeMillis()){
+        if (mNextFrameTime <= System.currentTimeMillis()) {
             // Tenth of a second has passed
 
             // Setup when the next update will be triggered
-            mNextFrameTime =System.currentTimeMillis()
+            mNextFrameTime = System.currentTimeMillis()
                     + MILLIS_PER_SECOND / TARGET_FPS;
 
             // Return true so that the update and draw
@@ -181,7 +189,7 @@ public void pauseGame() {
 
     // Update all the game objects
     public void update() {
-        if (mPaused){
+        if (mPaused) {
             return;
         }
 
@@ -189,7 +197,7 @@ public void pauseGame() {
         mSnake.move();
 
         // Did the head of the snake eat the apple?
-        if(mSnake.checkDinner(mApple.getLocation())){
+        if (mSnake.checkDinner(mApple.getLocation())) {
             // This reminds me of Edge of Tomorrow.
             // One day the apple will be ready!
             mApple.spawn();
@@ -206,7 +214,7 @@ public void pauseGame() {
             // Pause the game ready to start again
             mSP.play(mCrashID, 1, 1, 0, 0, 1);
 
-            mPaused =true;
+            mPaused = true;
         }
 
     }
@@ -233,7 +241,7 @@ public void pauseGame() {
             mSnake.draw(mCanvas, mPaint);
 
             // Draw some text while paused
-            if(mPaused){
+            if (mPaused) {
 
                 // Set the size and color of the mPaint for the text
                 mPaint.setColor(Color.argb(255, 255, 255, 255));
@@ -258,26 +266,47 @@ public void pauseGame() {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_UP:
                 if (mPaused) {
-                    if (mPauseButtonRect.contains((int) motionEvent.getX(), (int) motionEvent.
-                    getY())){
-                        togglePause();
+                    // If the game is paused, check if the touch event is inside the pause button
+                    if (mPauseButtonRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
+                        togglePause(); // Toggle the pause state
+                        return true;
+                    } else {
+                        // If not inside the pause button, start the game
+                        mPaused = false;
+                        newGame();
                         return true;
                     }
                 } else {
+                    // If the game is not paused, handle snake direction change
                     mSnake.switchHeading(motionEvent);
-                }
-                break;
-        }
-
-                    // Don't want to process snake direction for this tap
                     return true;
                 }
+        }
 
+        return true;
+    }
+
+    public void onToggleClicked(View view) {
+        // Perform action when toggle button is clicked
+        ToggleButton toggleButton = (ToggleButton) view;
+
+        if (toggleButton.isSelected()) {
+            // Pause the game
+            pauseGame();
+        } else {
+            // Resume the game
+            resumeGame();
+        }
+    }
+
+    private void resumeGame() {
+    }
 
     // Stop the thread
     public void togglePause() {
         mPaused = !mPaused;
     }
+
     // Add a method to pause the game
     public void pause() {
         mPaused = true;
@@ -293,6 +322,6 @@ public void pauseGame() {
     public void resume() {
         mPlaying = true;
         mThread = new Thread(this);
-        mThread.start();
+        mThread.start(); // Start the thread
     }
 }
