@@ -3,6 +3,8 @@ package com.example.snakeysnakegame;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -54,12 +56,17 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     private Rect mPauseButtonRect;
 
+    private  Bitmap mBitmapBackground;
 
+
+    //I had to add this, it is similar to the one found in snake.java
+    //i had to import the import android.graphics.Bitmap; and import android.graphics.BitmapFactory;
     // This is the constructor method that gets called
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
         super(context);
 
+        mBitmapBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         // Work out how many pixels each block is
         int blockSize = size.x / NUM_BLOCKS_WIDE;
         // How many blocks of the same size will fit into the height
@@ -227,14 +234,14 @@ class SnakeGame extends SurfaceView implements Runnable {
             mCanvas = mSurfaceHolder.lockCanvas();
 
             // Fill the screen with a color
-            mCanvas.drawColor(Color.argb(255, 26, 128, 182));
-
+            mCanvas.drawBitmap(mBitmapBackground, 0, 0, null);
+            mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 1080, 2220, false);
             // Set the size and color of the mPaint for the text
-            mPaint.setColor(Color.argb(255, 255, 255, 255));
+            mPaint.setColor(Color.argb(255, 0, 0, 0));
             mPaint.setTextSize(120);
 
             // Draw the score
-            mCanvas.drawText("          score: " + mScore, 20, 120, mPaint);
+            mCanvas.drawText("          SCORE: " + mScore, 20, 120, mPaint);
 
             // Draw the apple and the snake
             mApple.draw(mCanvas, mPaint);
