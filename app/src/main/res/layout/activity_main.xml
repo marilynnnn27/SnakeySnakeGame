@@ -7,10 +7,12 @@
     tools:context=".SnakeActivity"
     android:background= "@drawable/background">
 
-    <TextView
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/pauseSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/pause_game"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

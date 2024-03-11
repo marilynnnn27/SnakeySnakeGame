@@ -25,7 +25,7 @@
             <!-- Set the layout for SnakeActivity programmatically -->
             <meta-data
                 android:name="android.app.activity.layout"
-                android:resource="@layout/activity_snake" />
+                android:resource="@layout/activity_main" />
         </activity>
     </application>
 

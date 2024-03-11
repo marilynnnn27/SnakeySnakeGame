@@ -17,8 +17,8 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.ToggleButton;
+import android.widget.Switch;
+import android.widget.CompoundButton;
 
 import java.io.IOException;
 
@@ -58,6 +58,8 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     private  Bitmap mBitmapBackground;
 
+    private Switch mPauseSwitch;
+
 
     //I had to add this, it is similar to the one found in snake.java
     //i had to import the import android.graphics.Bitmap; and import android.graphics.BitmapFactory;
@@ -79,6 +81,21 @@ class SnakeGame extends SurfaceView implements Runnable {
         int bottom = top + buttonHeight;
 
         mPauseButtonRect = new Rect(left, top, right, bottom);
+
+        Switch pauseSwitch = null;
+        mPauseSwitch = pauseSwitch;
+
+        // Set listener for the switch
+        mPauseSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    pauseGame(); // Pause the game
+                } else {
+                    resumeGame(); // Resume the game
+                }
+            }
+        });
 
         // Initialize the SoundPool
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -144,6 +161,7 @@ class SnakeGame extends SurfaceView implements Runnable {
     }
 
     public void pauseGame() {
+
         mPaused = true;
     }
 
@@ -278,7 +296,7 @@ class SnakeGame extends SurfaceView implements Runnable {
                 if (mPaused) {
                     // If the game is paused, check if the touch event is inside the pause button
                     if (mPauseButtonRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                        togglePause(); // Toggle the pause state
+                        pauseGame();
                         return true;
                     } else {
                         // If not inside the pause button, start the game
@@ -296,11 +314,8 @@ class SnakeGame extends SurfaceView implements Runnable {
         return true;
     }
 
-    public void onToggleClicked(View view) {
-        // Perform action when toggle button is clicked
-        ToggleButton toggleButton = (ToggleButton) view;
-
-        if (toggleButton.isSelected()) {
+    public void onSwitchClicked(boolean isChecked) {
+        if (isChecked) {
             // Pause the game
             pauseGame();
         } else {
@@ -310,11 +325,6 @@ class SnakeGame extends SurfaceView implements Runnable {
     }
 
     private void resumeGame() {
-    }
-
-    // Stop the thread
-    public void togglePause() {
-        mPaused = !mPaused;
     }
 
     // Add a method to pause the game
