@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class SnakeGame extends SurfaceView implements Runnable {
 
+    private static Canvas mCanvas;
     // Control pausing between updates
     private long mNextFrameTime;
     // Is the game currently playing and or paused?
@@ -153,7 +154,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
             try {
                 sleep(10); // Adjust the delay as needed
             } catch (InterruptedException e) {
-              //  e.printStackTrace();
+                //  e.printStackTrace();
             }
         }
     }
@@ -243,14 +244,12 @@ public class SnakeGame extends SurfaceView implements Runnable {
 
                 // Set the size and color of the mPaint for the text
                 mPaint.setColor(Color.argb(255, 255, 255, 255));
-                mPaint.setTextSize(250);
+                mPaint.setTextSize(50);
 
                 // Draw the message
                 // We will give this an international upgrade soon
                 //mCanvas.drawText("Tap To Play!", 200, 700, mPaint);
-                mCanvas.drawText(getResources().
-                                getString(R.string.tap_to_play),
-                        200, 700, mPaint);
+                mCanvas.drawText("Pause", 100, 200, mPaint);
             }
             //names
             mPaint.setTextSize(35);
