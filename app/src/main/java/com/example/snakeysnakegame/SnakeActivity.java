@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.View;
+import android.widget.Button;
+
 
 public class SnakeActivity extends Activity {
 
@@ -14,6 +17,7 @@ public class SnakeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_snake);
 
         // Get the pixel dimensions of the screen
@@ -41,6 +45,18 @@ public class SnakeActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        mSnakeGame.pause();
+        mSnakeGame.pauseGame();
+    }
+
+    public void onTouchEvent(View view) {
+        Button button = (Button) view;
+        if (button.getText().toString().equals("Pause")) {
+            mSnakeGame.pauseGame();
+            button.setText("Resume");
+        } else {
+            mSnakeGame.resume();
+            button.setText("Pause");
+        }
+
     }
 }
