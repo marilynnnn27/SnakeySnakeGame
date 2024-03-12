@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -58,6 +59,7 @@ class SnakeGame extends SurfaceView implements Runnable {
 
     private  Bitmap mBitmapBackground;
 
+    private Typeface mFont;
 
     //I had to add this, it is similar to the one found in snake.java
     //i had to import the import android.graphics.Bitmap; and import android.graphics.BitmapFactory;
@@ -65,6 +67,7 @@ class SnakeGame extends SurfaceView implements Runnable {
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
         super(context);
+        mFont= Typeface.createFromAsset(context.getAssets(), "minecraftfont.otf");
 
         mBitmapBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         // Work out how many pixels each block is
@@ -233,6 +236,7 @@ class SnakeGame extends SurfaceView implements Runnable {
         if (mSurfaceHolder.getSurface().isValid()) {
             mCanvas = mSurfaceHolder.lockCanvas();
 
+            mPaint.setTypeface(mFont);
             // Fill the screen with a color
             mCanvas.drawBitmap(mBitmapBackground, 0, 0, null);
             mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 1080, 2220, false);
@@ -241,7 +245,7 @@ class SnakeGame extends SurfaceView implements Runnable {
             mPaint.setTextSize(120);
 
             // Draw the score
-            mCanvas.drawText("SCORE: " + mScore, 60, 160, mPaint);
+            mCanvas.drawText("SCORE:" + mScore, 60, 160, mPaint);
 
             // Draw the apple and the snake
             mApple.draw(mCanvas, mPaint);
@@ -264,8 +268,8 @@ class SnakeGame extends SurfaceView implements Runnable {
             //names
             mPaint.setTextSize(35);
             mPaint.setColor(Color.argb(255,0 , 0, 0));
-            mCanvas.drawText("MARIA VALENCIA", 750, 75, mPaint);
-            mCanvas.drawText("MARILYN SARABIA", 744, 120, mPaint);
+            mCanvas.drawText("MARIA VALENCIA", 727, 75, mPaint);
+            mCanvas.drawText("MARILYN SARABIA", 719, 120, mPaint);
             // Unlock the mCanvas and reveal the graphics for this frame
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
