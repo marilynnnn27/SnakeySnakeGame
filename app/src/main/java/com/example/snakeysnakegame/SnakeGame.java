@@ -67,14 +67,8 @@ public class SnakeGame extends SurfaceView implements Runnable {
         int blockSize = size.x / NUM_BLOCKS_WIDE;
         // How many blocks of the same size will fit into the height
         mNumBlocksHigh = size.y / blockSize;
-        int buttonWidth = 200;
-        int buttonHeight = 100;
-        int left = (size.x - buttonWidth) / 2;
-        int top = (size.y - buttonHeight) / 2;
-        int right = left + buttonWidth;
-        int bottom = top + buttonHeight;
+     
 
-        Rect mPauseButtonRect = new Rect(left, top, right, bottom);
 
         // Initialize the SoundPool
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -248,15 +242,9 @@ public class SnakeGame extends SurfaceView implements Runnable {
 
             // Draw some text while paused
             if (mPaused) {
-               // mPaint.setColor(Color.argb(255, 255, 255, 255));
-               // mPaint.setTextSize(50);
-
-                // Draw the message
-                // We will give this an international upgrade soon
                 mCanvas.drawText("Tap To Play!", 400, 600, mPaint);
-                // mCanvas.drawText("Pause", 100, 200, mPaint);
+             
             }
-            //names
             mPaint.setTextSize(35);
             mPaint.setColor(Color.argb(255, 0, 0, 0));
             mCanvas.drawText("MARIA VALENCIA", 727, 75, mPaint);
