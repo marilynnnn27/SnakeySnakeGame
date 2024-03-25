@@ -50,9 +50,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
     // And an apple
     private final Apple mApple;
 
-    private final Rect mPauseButtonRect;
-
-    private  Bitmap mBitmapBackground;
+    private Bitmap mBitmapBackground;
 
     private Typeface mFont;
 
@@ -62,7 +60,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
     // from SnakeActivity
     public SnakeGame(Context context, Point size) {
         super(context);
-        mFont= Typeface.createFromAsset(context.getAssets(), "minecraftfont.otf");
+        mFont = Typeface.createFromAsset(context.getAssets(), "minecraftfont.otf");
 
         mBitmapBackground = BitmapFactory.decodeResource(context.getResources(), R.drawable.background);
         // Work out how many pixels each block is
@@ -76,7 +74,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
         int right = left + buttonWidth;
         int bottom = top + buttonHeight;
 
-        mPauseButtonRect = new Rect(left, top, right, bottom);
+        Rect mPauseButtonRect = new Rect(left, top, right, bottom);
 
         // Initialize the SoundPool
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -243,42 +241,52 @@ public class SnakeGame extends SurfaceView implements Runnable {
             mApple.draw(mCanvas, mPaint);
             mSnake.draw(mCanvas, mPaint);
 
+            // Set the size and color of the mPaint for the text
+            mPaint.setColor(Color.argb(255, 255, 255, 255));
+            mPaint.setTextSize(50);
+            mCanvas.drawText("PAUSE", 100, 200, mPaint);
+
             // Draw some text while paused
             if (mPaused) {
-
-                // Set the size and color of the mPaint for the text
-                mPaint.setColor(Color.argb(255, 255, 255, 255));
-                mPaint.setTextSize(50);
+               // mPaint.setColor(Color.argb(255, 255, 255, 255));
+               // mPaint.setTextSize(50);
 
                 // Draw the message
                 // We will give this an international upgrade soon
-                //mCanvas.drawText("Tap To Play!", 200, 700, mPaint);
-                mCanvas.drawText("Pause", 100, 200, mPaint);
+                mCanvas.drawText("Tap To Play!", 400, 600, mPaint);
+                // mCanvas.drawText("Pause", 100, 200, mPaint);
             }
             //names
             mPaint.setTextSize(35);
-            mPaint.setColor(Color.argb(255,0 , 0, 0));
+            mPaint.setColor(Color.argb(255, 0, 0, 0));
             mCanvas.drawText("MARIA VALENCIA", 727, 75, mPaint);
             mCanvas.drawText("MARILYN SARABIA", 719, 120, mPaint);
             // Unlock the mCanvas and reveal the graphics for this frame
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
     }
+    // Other code remains the same...
 
+    // Handle touch events
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if ((motionEvent.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
-            if (mPaused) {
-                // If the game is paused, check if the touch event is inside the pause button
-                if (mPauseButtonRect.contains((int) motionEvent.getX(), (int) motionEvent.getY())) {
-                    togglePause(); // Toggle the pause state
-                    return true;
-                } else {
-                    // If not inside the pause button, start the game
-                    mPaused = false;
-                    newGame();
-                    return true;
-                }
+            // Get the coordinates of the touch event
+            int touchX = (int) motionEvent.getX();
+            int touchY = (int) motionEvent.getY();
+
+            // Check if the touch event is within the bounds of the "Pause" text
+            if (touchX >= 100 && touchX <= 100 + mPaint.measureText("Pause") &&
+                    touchY >= 200 - mPaint.getTextSize() && touchY <= 200) {
+                // Toggle the pause state
+                togglePause();
+                return true;
+            } else if (mPaused) {
+                // If the game is paused and the touch event is outside the "Pause" text,
+                // resume the game
+                mPaused = false;
+                newGame();
+                return true;
             } else {
                 // If the game is not paused, handle snake direction change
                 mSnake.switchHeading(motionEvent);
@@ -288,7 +296,6 @@ public class SnakeGame extends SurfaceView implements Runnable {
 
         return true;
     }
-
 
     // Stop the thread
     public void togglePause() {
