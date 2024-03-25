@@ -22,11 +22,7 @@ import java.io.IOException;
 
 
 public class SnakeGame extends SurfaceView implements Runnable {
-
-    private static Canvas mCanvas;
-    // Control pausing between updates
     private long mNextFrameTime;
-    // Is the game currently playing and or paused?
     private volatile boolean mPlaying = true;
     private volatile boolean mPaused = true;
 
@@ -45,9 +41,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
     private final SurfaceHolder mSurfaceHolder;
     private final Paint mPaint;
 
-    // A snake ssss
     private final Snake mSnake;
-    // And an apple
     private final Apple mApple;
 
     private Bitmap mBitmapBackground;
@@ -100,16 +94,9 @@ public class SnakeGame extends SurfaceView implements Runnable {
         mPaint = new Paint();
 
         // Call the constructors of our two game objects
-        mApple = new Apple(context,
-                new Point(NUM_BLOCKS_WIDE,
-                        mNumBlocksHigh),
-                blockSize);
+        mApple = new Apple(context,new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh), blockSize);
 
-        mSnake = new Snake(context,
-                new Point(NUM_BLOCKS_WIDE,
-                        mNumBlocksHigh),
-                blockSize);
-
+        mSnake = new Snake(context, new Point(NUM_BLOCKS_WIDE, mNumBlocksHigh),blockSize);
     }
 
 
