@@ -213,10 +213,10 @@ public class SnakeGame extends SurfaceView implements Runnable {
             mBitmapBackground = Bitmap.createScaledBitmap(mBitmapBackground, 1080, 2220, false);
             // Set the size and color of the mPaint for the text
             mPaint.setColor(Color.argb(255, 0, 0, 0));
-            mPaint.setTextSize(120);
+            mPaint.setTextSize(100);
 
             // Draw the score
-            mCanvas.drawText("SCORE:" + mScore, 60, 160, mPaint);
+            mCanvas.drawText("SCORE: " + mScore, 60, 140, mPaint);
 
             // Draw the apple and the snake
             mApple.draw(mCanvas, mPaint);
@@ -225,7 +225,7 @@ public class SnakeGame extends SurfaceView implements Runnable {
             // Set the size and color of the mPaint for the text
             mPaint.setColor(Color.argb(255, 0, 0, 0));
             mPaint.setTextSize(67);
-            mCanvas.drawText("PAUSE", 64, 265, mPaint);
+            mCanvas.drawText("PAUSE", 64, 230, mPaint);
 
             // Draw some text while paused
             if (mPaused) {
